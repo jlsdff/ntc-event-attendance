@@ -32,9 +32,6 @@ Route::group(['middleware'=>['auth:sanctum']], function(){
 });
 
 
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Testing Routes // TODO: Remove this
