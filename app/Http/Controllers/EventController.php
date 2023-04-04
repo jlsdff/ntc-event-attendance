@@ -111,7 +111,6 @@ class EventController extends Controller
     public function getAttendees($event_id){
         $event = Event::find($event_id);
         $event->attendees = $event->students()->get();
-        // $event->students;
         return $event;
     }
 }
