@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Attendee;
+use App\Models\Student;
+
 class AttendeeController extends Controller
 {
     /**
@@ -24,9 +26,31 @@ class AttendeeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
+        $request->validate([
+            'event_id'=>'required',
+            'student_id'=>'required',
+            'status'=>'required',
+        ]);
+        if(Attendee::where('student_id', $request->student_id)->where('event_id', $request->event_id)->exists()){
+            $response = [
+                'message' => 'Attendee already recorded',
+                'student'=> Student::where('student_id', $request->student_id)->first()
+            ];
+            return response($response, 201);
+        }
+        if(!Student::where('student_id', $request->student_id)->exists()){
+            $response = [
+                'message' => 'Student not found'
+            ];
+            return response($response, 400);
+        }
         $attendee = Attendee::create($request->all());
-        return response($attendee, 201);
+        $response = [
+            'message' => 'Attendee recorded',
+            'student'=> Student::where('student_id', $request->student_id)->first()
+        ];
+        return response($response, 201);
     }
 
     /**

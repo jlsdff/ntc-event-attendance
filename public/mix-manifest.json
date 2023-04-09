@@ -1,0 +1,13 @@
+{
+    "/js/index.js": "/js/index.js",
+    "/js/App.js": "/js/App.js",
+    "/js/context.js": "/js/context.js",
+    "/js/SessionProvider.js": "/js/SessionProvider.js",
+    "/js/Login.js": "/js/Login.js",
+    "/js/Main.js": "/js/Main.js",
+    "/js/Events.js": "/js/Events.js",
+    "/js/Table.js": "/js/Table.js",
+    "/js/EventRow.js": "/js/EventRow.js",
+    "/js/Scan.js": "/js/Scan.js",
+    "/css/app.css": "/css/app.css"
+}
