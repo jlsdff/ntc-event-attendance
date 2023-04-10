@@ -32,6 +32,12 @@ class AttendeeController extends Controller
             'student_id'=>'required',
             'status'=>'required',
         ]);
+        if($request->student_id == null){
+            $response = [
+                'message' => 'Invalid QR Code'
+            ];
+            return response($response, 400);
+        }
         if(Attendee::where('student_id', $request->student_id)->where('event_id', $request->event_id)->exists()){
             $response = [
                 'message' => 'Attendee already recorded',
