@@ -3288,11 +3288,19 @@ function Scan(_ref) {
   var event = _ref.event,
     onExit = _ref.onExit;
   var ctx = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_context_context__WEBPACK_IMPORTED_MODULE_4__.context);
+  var studentID = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
     _useState2 = _slicedToArray(_useState, 2),
     result = _useState2[0],
     setResult = _useState2[1];
-  var studentID = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null),
+    _useState4 = _slicedToArray(_useState3, 2),
+    error = _useState4[0],
+    setError = _useState4[1];
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(true),
+    _useState6 = _slicedToArray(_useState5, 2),
+    isScanning = _useState6[0],
+    setIsScanning = _useState6[1];
   var modal = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
   function handleSubmitAttendee(e) {
     e.preventDefault();
@@ -3313,7 +3321,8 @@ function Scan(_ref) {
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
-            _context.next = 2;
+            setIsScanning(false);
+            _context.next = 3;
             return axios__WEBPACK_IMPORTED_MODULE_6___default().post("".concat(ctx.url, "/attendee"), data, {
               headers: {
                 Authorization: "Bearer ".concat(ctx.token)
@@ -3323,13 +3332,14 @@ function Scan(_ref) {
             })["catch"](function (error) {
               console.error(error);
             });
-          case 2:
+          case 3:
             setTimeout(function () {
               setResult(null);
+              setIsScanning(true);
             }, 1000);
             studentID.current.value = "";
             console.log(data);
-          case 5:
+          case 6:
           case "end":
             return _context.stop();
         }
@@ -3340,12 +3350,24 @@ function Scan(_ref) {
   function handleScan(data) {
     if (data && data.text) {
       var student_number = parseInt(data.text.split(", ")[0]);
-      var _result = {
-        event_id: event.event_id,
-        student_id: student_number,
-        status: "present"
-      };
-      handlePostAttendee(_result);
+      if (isNaN(student_number) || student_number === null) {
+        setIsScanning(false);
+        console.log("Error"); //TODO! DELETE THIS
+        setError({
+          message: "Invalid QR Code"
+        });
+        setTimeout(function () {
+          setError(null);
+          setIsScanning(true);
+        }, 1000);
+      } else {
+        var _result = {
+          event_id: event.event_id,
+          student_id: student_number,
+          status: "present"
+        };
+        handlePostAttendee(_result);
+      }
     }
   }
   function handleError(err) {
@@ -3398,9 +3420,9 @@ function Scan(_ref) {
             children: "ADD"
           })]
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
         className: "scanner-info",
-        children: !result ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
+        children: [isScanning && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)("div", {
             className: "loader",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
@@ -3435,12 +3457,12 @@ function Scan(_ref) {
             className: "display",
             children: "Scanning..."
           })]
-        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
+        }), result && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.Fragment, {
           children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("img", {
             src: _images_check_svg__WEBPACK_IMPORTED_MODULE_2__["default"]
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h1", {
             style: {
-              color: 'green'
+              color: "green"
             },
             children: result.student.student_id
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h2", {
@@ -3448,7 +3470,16 @@ function Scan(_ref) {
           }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h3", {
             children: "".concat(result.student.block_section, "-").concat(result.student.course)
           })]
-        })
+        }), error && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("div", {
+          className: "error",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_8__.jsx)("h1", {
+            style: {
+              color: "red",
+              fontSize: "2rem"
+            },
+            children: error.message
+          })
+        })]
       })]
     })
   });

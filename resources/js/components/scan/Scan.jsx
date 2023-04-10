@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useContext } from "react";
 import close from "../../images/close.svg";
-import check from '../../images/check.svg'
+import check from "../../images/check.svg";
 import "./Scan.css";
 import { context } from "../context/context";
 import { QrReader } from "react-qr-reader";
@@ -9,10 +9,11 @@ import Modal from "../modal/Modal";
 
 export default function Scan({ event, onExit }) {
     const ctx = useContext(context);
-    const [result, setResult] = useState(null);
     const studentID = useRef();
+    const [result, setResult] = useState(null);
+    const [error, setError] = useState(null);
+    const [isScanning, setIsScanning] = useState(true);
     const modal = useRef();
-
 
     function handleSubmitAttendee(e) {
         e.preventDefault();
@@ -26,6 +27,7 @@ export default function Scan({ event, onExit }) {
         }
     }
     async function handlePostAttendee(data) {
+        setIsScanning(false)
         await axios
             .post(`${ctx.url}/attendee`, data, {
                 headers: {
@@ -41,6 +43,7 @@ export default function Scan({ event, onExit }) {
 
         setTimeout(() => {
             setResult(null);
+            setIsScanning(true);
         }, 1000);
         studentID.current.value = "";
         console.log(data);
@@ -48,12 +51,24 @@ export default function Scan({ event, onExit }) {
     function handleScan(data) {
         if (data && data.text) {
             const student_number = parseInt(data.text.split(", ")[0]);
-            const result = {
-                event_id: event.event_id,
-                student_id: student_number,
-                status: "present"
-            };
-            handlePostAttendee(result);
+            if (isNaN(student_number) || student_number === null) {
+                setIsScanning(false)
+                console.log("Error"); //TODO! DELETE THIS
+                setError({
+                    message: "Invalid QR Code",
+                });
+                setTimeout(() => {
+                    setError(null);
+                    setIsScanning(true);
+                }, 1000);
+            } else {
+                const result = {
+                    event_id: event.event_id,
+                    student_id: student_number,
+                    status: "present",
+                };
+                handlePostAttendee(result);
+            }
         }
     }
     function handleError(err) {
@@ -100,7 +115,7 @@ export default function Scan({ event, onExit }) {
                     </form>
                 </div>
                 <div className="scanner-info">
-                    {!result ? (
+                    {isScanning && (
                         <>
                             <div className="loader">
                                 <div className="square" id="sq1"></div>
@@ -115,13 +130,23 @@ export default function Scan({ event, onExit }) {
                             </div>
                             <h1 className="display">Scanning...</h1>
                         </>
-                    ) : (
+                    )}
+                    {result && (
                         <>
-                            <img src={check}/>
-                            <h1 style={{color:'green'}}>{result.student.student_id}</h1>
+                            <img src={check} />
+                            <h1 style={{ color: "green" }}>
+                                {result.student.student_id}
+                            </h1>
                             <h2>{`${result.student.lname}, ${result.student.fname} `}</h2>
                             <h3>{`${result.student.block_section}-${result.student.course}`}</h3>
                         </>
+                    )}
+                    {error && (
+                        <div className="error">
+                            <h1 style={{ color: "red", fontSize: "2rem" }}>
+                                {error.message}
+                            </h1>
+                        </div>
                     )}
                 </div>
             </div>
