@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\Course;
 use App\Models\YearLevel;
+use App\Models\Attendee;
 
 class EventController extends Controller
 {
@@ -17,12 +18,13 @@ class EventController extends Controller
      */
     public function index()
     {   
-        $event = Event::all();
-        foreach($event as $e){
-            $e->courses;
-            $e->yearLevels;
+        //return all events sorted by created_at
+        $events = Event::orderBy('created_at', 'desc')->get();
+        foreach($events as $event){
+            $event->courses;
+            $event->yearLevels;
         }
-        return response($event, 200);
+        return $events;
     }
 
     /**
@@ -110,7 +112,14 @@ class EventController extends Controller
     }
     public function getAttendees($event_id){
         $event = Event::find($event_id);
-        $event->attendees = $event->students()->get();
-        return $event;
+        $attendees = Attendee::where('event_id', $event_id)->get();
+        foreach($attendees as $attendee){
+            $attendee->student;
+        }
+        $response = [
+            'event' => $event,
+            'attendees' => $attendees
+        ];
+        return response($response, 200);
     }
 }

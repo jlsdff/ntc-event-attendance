@@ -14,4 +14,12 @@ class Attendee extends Model
         "student_id",
         "status"
     ];  
+
+    public function event(){
+        return $this->belongsTo(Event::class, 'event_id');
+    }
+    public function student(){
+        return $this->belongsTo(Student::class, 'student_id');
+    }
+
 }
