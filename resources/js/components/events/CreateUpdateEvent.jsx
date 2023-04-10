@@ -1,10 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import Modal from "../modal/Modal";
 import close from "../../images/close.svg";
 import add from "../../images/add.svg";
 import remove from "../../images/remove.svg";
 import "./CreateUpdateEvent.css";
+import axios from "axios";
+import { context } from "../context/context";
 export default function CreateUpdateEvent({ event, onExit }) {
+    const ctx = useContext(context);
     const [yearLevels, setYearLevels] = useState([]);
     const [courses, setCourses] = useState([]);
     const eventName = useRef(null);
@@ -12,15 +15,24 @@ export default function CreateUpdateEvent({ event, onExit }) {
     const eventTime = useRef(null);
     const course = useRef(null);
 
-    useEffect(()=>{
-        if(event){
-            eventName.current.value = event.event_name;
-            eventDate.current.value = event.event_date;
-            eventTime.current.value = event.event_time;
-            setYearLevels(event.year_levels);
-            setCourses(event.courses);
+    useEffect(() => {
+        if (event) {
+            const [
+                event_id,
+                event_name,
+                event_date,
+                event_time,
+                inCourses,
+                year_levels,
+            ] = event;
+            eventName.current.value = event_name;
+            eventDate.current.value = event_date;
+            eventTime.current.value = event_time;
+            setYearLevels(year_levels);
+            setCourses(inCourses);
+            console.log(event);
         }
-    })
+    }, [event]);
     function handleSubmit(e) {
         e.preventDefault();
         const request = {
@@ -30,8 +42,35 @@ export default function CreateUpdateEvent({ event, onExit }) {
             year_levels: yearLevels,
             courses: courses,
         };
-
-        console.log(request);
+        if (event) {
+            axios
+                .put(`${ctx.url}/event/${event[0]}`, request, {
+                    headers: {
+                        Authorization: `Bearer ${ctx.token}`,
+                    },
+                })
+                .then((reponse) => {
+                    console.log(reponse);
+                    onExit();
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        } else {
+            axios
+                .post(`${ctx.url}/event`, request, {
+                    headers: {
+                        Authorization: `Bearer ${ctx.token}`,
+                    },
+                })
+                .then((reponse) => {
+                    console.log(reponse);
+                    onExit();
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
     }
 
     function handleYearLevel(yearLevel) {
@@ -44,7 +83,7 @@ export default function CreateUpdateEvent({ event, onExit }) {
     function addCourse() {
         const value = course.current.value.toUpperCase();
         setCourses((prev) => [...prev, value]);
-        course.current.value = ""
+        course.current.value = "";
     }
     function removeCourse(course) {
         setCourses((prev) => prev.filter((item) => item !== course));
@@ -56,7 +95,7 @@ export default function CreateUpdateEvent({ event, onExit }) {
                 <h1 className="h1-head">
                     {event ? "Update Event" : "New Event"}
                 </h1>
-                <img src={close} className="close" />
+                <img src={close} className="close" onClick={onExit} />
                 <form onSubmit={handleSubmit}>
                     <div className="form-1">
                         <label className="input-group">

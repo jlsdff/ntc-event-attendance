@@ -1,0 +1,91 @@
+.view-attendees {
+    width: 80vw;
+    height: 80vh;
+    padding: 2rem;
+    display: flex;
+    justify-items: center;
+    align-items: flex-start;
+    position: relative;
+    flex-direction: column;
+    overflow-y: scroll;
+    border-radius: 1rem;
+    background-color: #fff;
+}
+.view-attendees .header {
+    width: 100%;
+    margin: 1rem 0rem;
+    text-align: center;
+}
+.view-attendees::-webkit-scrollbar{
+    display: none;
+}
+.export-button {
+    position: fixed;
+    right: calc(10vw + 2rem);
+    bottom: calc(10vh + 2rem);
+    box-shadow: 0px 5px 10px #1b1b1b29;
+    z-index: 100;
+    transition: 300ms all ease;
+}
+.export-button:hover {
+    box-shadow: 5px 5px 5px #00000029;
+}
+.view-attendees table {
+    width: 100%;
+    flex: 1 1 auto;
+    overflow-y: scroll;
+}
+.view-attendees table thead {
+    display: table-header-group;
+}
+.view-attendees table thead tr {
+    display: table-row;
+    background-color: #160794;
+}
+.view-attendees table thead tr th {
+    display: table-cell;
+    padding: 0.5rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: white;
+}
+.view-attendees table tbody {
+    display: table-row-group;
+}
+.view-attendees table tbody tr {
+    display: table-row;
+    background-color: #fff;
+}
+.view-attendees table tbody tr td {
+    display: table-cell;
+    padding: 0.5rem;
+    text-align: left;
+    font-size: 1.2rem;
+}
+.view-attendees table tbody tr td:nth-child(1) {
+    /* Student ID */
+    width: 15%;
+}
+.view-attendees table tbody tr td:nth-child(2) {
+    /* Student Name */
+    width: 50%;
+}
+.view-attendees table tbody tr td:nth-child(3) {
+    /* Course Code */
+    width: 10%;
+}
+.view-attendees table tbody tr td:nth-child(4) {
+    /* Year Level */
+    width: 10%;
+}
+.view-attendees table tbody tr td:nth-child(5) {
+    /* Time in */
+    width: 15%;
+}
+.view-attendees table tbody tr:nth-child(odd) {
+    background-color: #e6e6e6;
+}
+.view-attendees table tbody tr:hover {
+    background-color: #c5c4c4;
+}

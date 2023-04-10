@@ -4,16 +4,20 @@ import axios from "axios";
 import EventRow from "./EventRow";
 import "./Table.css";
 import Scan from "../scan/Scan";
+import CreateUpdateEvent from "./CreateUpdateEvent";
+import ViewAttendees from "../attendees/ViewAttendees";
 
-export default function Table() {
+export default function Table({isCreatedNewEvent}) {
     const ctx = useContext(context);
     const [activeEvent, setActiveEvent] = useState(null);
     const [events, setEvents] = useState([]);
     const [isScanning, setIsScanning] = useState(false);
+    const [isEdditing, setIsEdditing] = useState(false);
+    const [isViewing, setIsViewing] = useState(false);
 
     useEffect(() => {
         fetchEvents();
-    }, [fetchEvents]);
+    }, [fetchEvents, isCreatedNewEvent]);
 
     const fetchEvents = useCallback(async () => {
         const data = await axios
@@ -48,10 +52,13 @@ export default function Table() {
     }
 
     function handleEditEvent(event) {
-        console.log(event);
+        setIsEdditing(true);
+        console.log(event)
+        setActiveEvent(event);
     }
     function handleViewAttendance(event_id) {
-        console.log(event_id);
+        setIsViewing(true);
+        setActiveEvent(event_id);
     }
     function ScanQRCode(event) {
         setActiveEvent(event);
@@ -59,14 +66,16 @@ export default function Table() {
     }
     function handleOnExit() {
         setIsScanning(false);
+        setIsEdditing(false);
+        setIsViewing(false)
+
         setActiveEvent(null);
+        fetchEvents();
     }
 
     return (
         <>
-            <div>
-                
-            </div>
+            <div></div>
             <table className="events-table">
                 <thead>
                     <tr>
@@ -109,6 +118,15 @@ export default function Table() {
                 </tbody>
             </table>
             {isScanning && <Scan event={activeEvent} onExit={handleOnExit} />}
+            {isEdditing && (
+                <CreateUpdateEvent
+                    event={activeEvent}
+                    onExit={handleOnExit}
+                />
+            )}
+            {
+                isViewing && <ViewAttendees event_id={activeEvent} onExit={handleOnExit}/>
+            }
         </>
     );
 }

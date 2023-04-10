@@ -3859,14 +3859,13 @@ function EventRow(_ref) {
     onDelete(id);
   }
   function editEvent() {
-    onEdit({
-      id: id,
-      name: name,
-      date: date,
-      time: time,
-      courses: courses,
-      yearLevels: yearLevels
+    var c = courses.map(function (c) {
+      return c.course_name;
     });
+    var yl = yearLevels.map(function (y) {
+      return y.year_level;
+    });
+    onEdit([id, name, date, time, c, yl]);
   }
   function viewEventAttendance() {
     viewAttendance(id);

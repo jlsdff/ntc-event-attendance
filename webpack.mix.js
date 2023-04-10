@@ -11,5 +11,6 @@ mix.js('resources/js/index.js', 'public/js')
     .js('resources/js/components/events/EventRow.jsx', 'public/js')
     .js('resources/js/components/modal/Modal.jsx', 'public/js')
     .js('resources/js/components/scan/Scan.jsx', 'public/js')
+    .js('resources/js/components/attendees/ViewAttendees.jsx', 'public/js')
     .react()
     .sass('resources/sass/app.scss', 'public/css');

@@ -24,7 +24,9 @@ export default function EventRow({
         onDelete(id);
     }
     function editEvent() {
-        onEdit({ id, name, date, time, courses, yearLevels });
+        const c = courses.map((c) => c.course_name);
+        const yl = yearLevels.map((y) => y.year_level);
+        onEdit([id, name, date, time, c, yl]);
     }
     function viewEventAttendance() {
         viewAttendance(id);

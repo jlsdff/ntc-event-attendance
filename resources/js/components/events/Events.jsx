@@ -1,12 +1,22 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { context } from "../context/context";
 import axios from "axios";
 import "./Events.css";
 import logo from "../../images/logo.png";
 import Table from "./Table";
+import CreateUpdateEvent from "./CreateUpdateEvent";
 
 export default function Events({}) {
     const ctx = useContext(context);
+    const [isCreating, setIsCreating] = useState(false);
+
+    function handleOnExit(){
+        setIsCreating(false);
+    }
+
+    function handleNewEvent(){
+        setIsCreating(true);
+    }
 
     async function handleLogout() {
         await axios
@@ -37,7 +47,7 @@ export default function Events({}) {
                 >
                     Logout
                 </a>
-                <button class="continue-application">
+                <button class="continue-application" onClick={handleNewEvent}>
                     <div>
                         <div class="pencil"></div>
                         <div class="folder">
@@ -53,8 +63,13 @@ export default function Events({}) {
                 </button>
             </nav>
             <div className="body">
-                <Table />
+                <Table isCreatedNewEvent={isCreating}/>
             </div>
+            {
+                isCreating && (
+                    <CreateUpdateEvent onExit={handleOnExit}/>
+                )
+            }
         </section>
     );
 }
