@@ -43,7 +43,7 @@ class AttendeeController extends Controller
                 'message' => 'Attendee already recorded',
                 'student'=> Student::where('student_id', $request->student_id)->first()
             ];
-            return response($response, 201);
+            return response($response, 400);
         }
         if(!Student::where('student_id', $request->student_id)->exists()){
             $response = [
