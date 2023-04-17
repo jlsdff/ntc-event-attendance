@@ -5,6 +5,7 @@ import "./Scan.css";
 import { context } from "../context/context";
 import { QrReader } from "react-qr-reader";
 import axios from "axios";
+import errorIcon from "../../images/error.svg"
 import Modal from "../modal/Modal";
 
 export default function Scan({ event, onExit }) {
@@ -38,15 +39,15 @@ export default function Scan({ event, onExit }) {
                 setResult(response.data);
             })
             .catch((error) => {
-                console.error(error);
+                setError(error.response.data);
             });
 
         setTimeout(() => {
             setResult(null);
+            setError(null);
             setIsScanning(true);
         }, 1000);
         studentID.current.value = "";
-        console.log(data);
     }
     function handleScan(data) {
         if (data && data.text) {
@@ -143,6 +144,7 @@ export default function Scan({ event, onExit }) {
                     )}
                     {error && (
                         <div className="error">
+                            <img src={errorIcon} />
                             <h1 style={{ color: "red", fontSize: "2rem" }}>
                                 {error.message}
                             </h1>
