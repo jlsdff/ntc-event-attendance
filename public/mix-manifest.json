@@ -8,6 +8,8 @@
     "/js/Events.js": "/js/Events.js",
     "/js/Table.js": "/js/Table.js",
     "/js/EventRow.js": "/js/EventRow.js",
+    "/js/Modal.js": "/js/Modal.js",
     "/js/Scan.js": "/js/Scan.js",
+    "/js/ViewAttendees.js": "/js/ViewAttendees.js",
     "/css/app.css": "/css/app.css"
 }

@@ -143,3 +143,9 @@
     margin-left: 15px;
     animation: loader_5191 675ms ease-in-out 600ms infinite;
 }
+.error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
