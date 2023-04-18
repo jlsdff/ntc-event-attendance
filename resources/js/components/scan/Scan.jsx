@@ -84,7 +84,7 @@ export default function Scan({ event, onExit }) {
                     <div className="scanner">
                         {isScanning && (
                             <QrReader
-                                scanDelay={2000}
+                                scanDelay={500}
                                 onError={handleError}
                                 onResult={handleScan}
                                 videoStyle={{

@@ -6774,7 +6774,7 @@ function Scan(_ref) {
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
           className: "scanner",
           children: isScanning && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(react_qr_reader__WEBPACK_IMPORTED_MODULE_5__.QrReader, {
-            scanDelay: 2000,
+            scanDelay: 500,
             onError: handleError,
             onResult: handleScan,
             videoStyle: {
