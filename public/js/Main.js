@@ -3211,7 +3211,6 @@ function Scan(_ref) {
       var student_number = parseInt(data.text.split(", ")[0]);
       if (isNaN(student_number) || student_number === null) {
         setIsScanning(false);
-        console.log("Error"); //TODO! DELETE THIS
         setError({
           message: "Invalid QR Code"
         });
@@ -3250,8 +3249,8 @@ function Scan(_ref) {
           children: "Scan for attendance"
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("div", {
           className: "scanner",
-          children:  true && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(react_qr_reader__WEBPACK_IMPORTED_MODULE_5__.QrReader, {
-            scanDelay: 1000,
+          children: isScanning && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(react_qr_reader__WEBPACK_IMPORTED_MODULE_5__.QrReader, {
+            scanDelay: 2000,
             onError: handleError,
             onResult: handleScan,
             videoStyle: {

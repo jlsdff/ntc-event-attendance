@@ -54,7 +54,6 @@ export default function Scan({ event, onExit }) {
             const student_number = parseInt(data.text.split(", ")[0]);
             if (isNaN(student_number) || student_number === null) {
                 setIsScanning(false)
-                console.log("Error"); //TODO! DELETE THIS
                 setError({
                     message: "Invalid QR Code",
                 });
@@ -83,9 +82,9 @@ export default function Scan({ event, onExit }) {
                     <h1 className="display">{event.event_name}</h1>
                     <p>Scan for attendance</p>
                     <div className="scanner">
-                        {true && (
+                        {isScanning && (
                             <QrReader
-                                scanDelay={1000}
+                                scanDelay={2000}
                                 onError={handleError}
                                 onResult={handleScan}
                                 videoStyle={{
